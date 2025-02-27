@@ -1,7 +1,7 @@
 package io.github.arkanoid;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector3;
+
 
 public class ButtonManagement {
 
