@@ -38,7 +38,7 @@ public class ScreenMenu implements Screen {
 
         btnGame = new Button(font, "Играть", 300, 1000);
         btnExit = new Button(font, "Выйти из игры", 130, 150);
-        btnSettings = new Button(font, "Настройки", SCR_WIDTH/2/2, 900);
+        btnSettings = new Button(font, "Настройки", SCR_WIDTH/2/2, 800);
 
 
     }

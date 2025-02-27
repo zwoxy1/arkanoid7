@@ -52,14 +52,14 @@ public class ScreenGame implements Screen {
         imgLeft = new Texture("playleft.png");
         imgRight = new Texture("playright.png");
 
-        btnLeft = new ButtonManagement(imgLeft, 150, 200);
-        btnRight = new ButtonManagement(imgRight, 550, 200);
+        btnLeft = new ButtonManagement(imgLeft, 100, 200, imgLeft.getWidth(), imgLeft.getHeight());
+        btnRight = new ButtonManagement(imgRight, 600, 200, imgRight.getWidth(), imgRight.getHeight());
 
         imgBall = new Texture("ball.png");
         imgPlatform = new Texture("platform.png");
 
-        ball = new Ball(300, 300);
-        platform = new Platform(200, 450, 100);
+        ball = new Ball(300, 300, imgBall.getWidth(), imgBall.getHeight());
+        platform = new Platform(200, 450, 100, imgPlatform.getWidth(), imgPlatform.getHeight());
     }
 
     @Override
@@ -78,9 +78,13 @@ public class ScreenGame implements Screen {
                 main.setScreen(main.screenMenu);
             }
 
-            if (btnLeft.hit(touch.x, touch.y)) {
-                platform.move();
-                main.setScreen(main.screenMenu);
+            if (btnLeft.hit(touch.x, touch.y) && platform.x > 0 ) {
+                platform.x-=45;
+
+            }
+
+            if (btnRight.hit(touch.x, touch.y) && platform.x < SCR_WIDTH-200){
+                platform.x+=45;
 
             }
 
@@ -103,11 +107,15 @@ public class ScreenGame implements Screen {
         if (ball.y < 0){
             ball.vy*=-1;
         }
+
         //////
 
 
 
 
+        if (ball.hit(platform.x, platform.y, platform.width, platform.height)){
+            ball.vy*=-1;
+        }
 
 
 
@@ -134,8 +142,9 @@ public class ScreenGame implements Screen {
         batch.draw(imgBall, ball.x, ball.y);
         batch.draw(imgPlatform,platform.x, platform.y);
 
-        batch.draw(btnLeft.img, btnLeft.x, btnRight.y);
-        batch.draw(btnRight.img, btnRight.x, btnRight.y);
+        batch.draw(btnLeft.img, btnLeft.x, btnLeft.y, btnLeft.width, btnLeft.height);
+        //batch.draw(btnLeft.img, btnLeft.x, btnLeft.y);
+        batch.draw(btnRight.img, btnRight.x, btnRight.y, btnRight.width,btnRight.height);
 
 
 
