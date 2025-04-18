@@ -3,7 +3,7 @@ package io.github.arkanoid;
 public class Ball {
     public float x, y;
     public float vx = 10;
-    public float vy = 10;
+    public float vy = -10;
     public float width;
     public float height;
 
@@ -21,8 +21,13 @@ public class Ball {
         y += vy;
     }
 
+    public void stop(){
+        vx = 0;
+        vy = 0;
+    }
+
 
     public boolean hit(float tx, float ty, float twidth, float theight){
-        return x>=tx+theight && tx<x+twidth && y<ty+theight && ty<y+theight;
+        return tx+twidth+10>=x+(width/2) && x+(width/2)>=tx-10 && y<ty+theight && ty<y+theight;
     }
 }
