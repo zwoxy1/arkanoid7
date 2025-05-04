@@ -2,6 +2,7 @@ package io.github.arkanoid;
 
 import static io.github.arkanoid.Main.SCR_HEIGHT;
 import static io.github.arkanoid.Main.SCR_WIDTH;
+import static io.github.arkanoid.Main.isSound;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -24,6 +25,7 @@ public class ScreenSettings implements Screen {
 
 
     Button btnBack;
+    Button btnSound;
 
     public ScreenSettings(Main main) {
         this.main = main;
@@ -35,6 +37,7 @@ public class ScreenSettings implements Screen {
         imgBg = new Texture("bg.png");
 
         btnBack = new Button(font, "x", 830, 1580);
+        btnSound = new Button(font, soundBtnText(), 50,750);
 
     }
 
@@ -53,6 +56,12 @@ public class ScreenSettings implements Screen {
             if (btnBack.hit(touch.x, touch.y)) {
                 main.setScreen(main.screenMenu);
             }
+
+            if (btnSound.hit(touch.x, touch.y)){
+                isSound = !isSound;
+                btnSound.setText(soundBtnText());
+
+            }
         }
 
 
@@ -65,6 +74,7 @@ public class ScreenSettings implements Screen {
         font.draw(batch, "Настройки", 200, 1300);
 
         btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
+        btnSound.font.draw(batch, btnSound.text, btnSound.x, btnSound.y);
 
 
         batch.end();
@@ -95,5 +105,9 @@ public class ScreenSettings implements Screen {
     public void dispose() {
         imgBg.dispose();
 
+    }
+
+    private String soundBtnText() {
+        return isSound ? "Музыка включена" : "Музыка выключена";
     }
 }

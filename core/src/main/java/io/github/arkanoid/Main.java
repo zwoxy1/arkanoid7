@@ -14,6 +14,10 @@ public class Main extends Game {
     public static final float SCR_HEIGHT = 1600;
 
 
+
+    public static boolean isSound = true;
+
+
     public SpriteBatch batch;
     public OrthographicCamera camera;
     public Vector3 touch;

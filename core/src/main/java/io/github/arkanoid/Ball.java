@@ -24,6 +24,7 @@ public class Ball {
     public void stop(){
         vx = 0;
         vy = 0;
+
     }
 
 
