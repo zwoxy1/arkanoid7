@@ -6,16 +6,20 @@ import static io.github.arkanoid.Main.isSound;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
+
+
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 public class ScreenGame implements Screen {
 
@@ -28,9 +32,19 @@ public class ScreenGame implements Screen {
 
     int a = 65;
     int b = 8;
-    boolean isGameOver = false;
+    public boolean isGameOver = false;
+    private boolean hasWon = false;
+    public boolean hasLose = false;
 
-    public static Sound gameSound;
+    private boolean showWinText = false;
+    private String winText = "Вы выиграли!";
+
+    private boolean showLoseText = false;
+    private String loseText = "Вы проиграли!";
+
+    public static Music gameSound;
+    public static Sound loseSound;
+    public static Sound winSound;
 
 
     Texture imgBg;
@@ -51,6 +65,7 @@ public class ScreenGame implements Screen {
     Button btnBackBig;
     ButtonManagement btnLeft;
     ButtonManagement btnRight;
+    Button btnReturn;
 
 
     Ball ball;
@@ -69,6 +84,8 @@ public class ScreenGame implements Screen {
         btnBack = new Button(font, "x", 850, 1595);
         btnBackBig = new Button(font, "Вернуться в меню", 5000, 9000);
 
+        btnReturn = new Button(font, "Заново", 300, 900);
+
 
         imgLeft = new Texture("playleft.png");
         imgRight = new Texture("playright.png");
@@ -80,21 +97,31 @@ public class ScreenGame implements Screen {
         imgPlatform = new Texture("platform.png");
         imgEnemy = new Texture("chebur.png");
 
-        gameSound = Gdx.audio.newSound(Gdx.files.internal("music.mp3"));
+        gameSound = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
+        gameSound.setLooping(true);
+        winSound = Gdx.audio.newSound(Gdx.files.internal("winsound.mp3"));
+        loseSound = Gdx.audio.newSound(Gdx.files.internal("losesound.mp3"));
 
         resetGame();
     }
 
     @Override
     public void show() {
-
-
+        if (isSound && !gameSound.isPlaying()) {
+            gameSound.play();
+        }
     }
 
     public void resetGame(){
         isGameOver = false;
+        hasWon = false;
+        hasLose = false;
+        showWinText = false;
+        showLoseText = false;
         a = 65;
         b = 8;
+
+
 
         gameSound.stop();
 
@@ -112,8 +139,8 @@ public class ScreenGame implements Screen {
         }
 
         // Создание новых мяча и платформы
-        ball = new Ball(40, 650, imgBall.getWidth(), imgBall.getHeight());
-        platform = new Platform(300, 350, 100, imgPlatform.getWidth(), imgPlatform.getHeight());
+        ball = new Ball(30, 750, imgBall.getWidth(), imgBall.getHeight());
+        platform = new Platform(300, 375, 100, imgPlatform.getWidth(), imgPlatform.getHeight());
 
         // Возврат кнопок на место
         btnLeft.x = 100;
@@ -122,6 +149,9 @@ public class ScreenGame implements Screen {
         btnBack.y = 1595;
         btnBack.text = "x";
         btnBackBig.x = 3000;
+        btnReturn.x = 3000;
+
+
 
     }
 
@@ -200,13 +230,35 @@ public class ScreenGame implements Screen {
 
         btnBackBig.font.draw(batch, btnBackBig.text, btnBackBig.x, btnBackBig.y);
 
+        if (showWinText) {
+            font.draw(batch, winText, 150, 1100);
+            btnReturn.font.draw(batch, btnReturn.text, btnReturn.x, btnReturn.y);
+            if(btnReturn.hit(touch.x, touch.y)){
+                resetGame();
+                if(isSound){
+                    gameSound.play();
+                }
+            }
+        }
+
+        if (showLoseText){
+            font.draw(batch, loseText, 150, 1100);
+            btnReturn.font.draw(batch, btnReturn.text, btnReturn.x, btnReturn.y);
+            if(btnReturn.hit(touch.x, touch.y)){
+                resetGame();
+                if(isSound){
+                    gameSound.play();
+                }
+            }
+        }
 
         batch.end();
 
 
 
-        if (b == 0) {
-            gameOver();
+        if (b == 0 && !hasWon) {
+            win();
+
         }
 
 
@@ -242,32 +294,52 @@ public class ScreenGame implements Screen {
         imgEnemy.dispose();
         imgLeft.dispose();
         imgRight.dispose();
+        gameSound.dispose();
 
 
     }
 
 
 
-    public void gameOver() {
+    public void win() {
+        if (hasWon) return;
+        if (showWinText) return;
+        hasWon = true;
+        showWinText = true;
         ball.stop();
         btnRight.x = 3000;
         btnLeft.x = 3000;
         btnBackBig.x = 50;
         btnBackBig.y = 700;
+        btnReturn.x = 300;
         btnBack.x += 100;
         gameSound.stop();
-        batch.begin();
-        font.draw(batch, "Вы выиграли!", 150, 950);
-        batch.end();
+
+        if (isSound) {
+            winSound.play();
+        }
+
+
     }
 
     public void lose(){
+        if (hasLose) return;
+        if(showLoseText) return;
+        hasLose = true;
+        showLoseText = true;
         ball.stop();
         btnRight.x = 3000;
         btnLeft.x = 3000;
         btnBackBig.x = 50;
         btnBackBig.y = 700;
+        btnReturn.x = 300;
         btnBack.x += 100;
         gameSound.stop();
+        if(isSound){
+            loseSound.play();
+        }
+
     }
+
+
 }

@@ -2,6 +2,7 @@ package io.github.arkanoid;
 
 import static io.github.arkanoid.Main.*;
 import static io.github.arkanoid.ScreenGame.gameSound;
+import static io.github.arkanoid.ScreenGame.winSound;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -58,9 +59,10 @@ public class ScreenMenu implements Screen {
 
             if (btnGame.hit(touch.x, touch.y)) {
                 main.setScreen(main.screenGame);
-                if (isSound) {
-                    gameSound.play();
-                }
+//                if (isSound) {
+//                    gameSound.play();       !!!!!!!!!!!!!!!
+//
+//                }
 
             }
 
