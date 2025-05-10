@@ -17,13 +17,10 @@ public class ButtonManagement {
         this.y = y;
         this.width = width;
         this.height = height;
-
     }
 
 
     public boolean hit(float tx, float ty){
         return x<tx && tx<x+width && y<ty && ty<y+height;
     }
-
-
 }

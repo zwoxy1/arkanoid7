@@ -2,6 +2,7 @@ package io.github.arkanoid;
 
 import static io.github.arkanoid.Main.SCR_HEIGHT;
 import static io.github.arkanoid.Main.SCR_WIDTH;
+import static io.github.arkanoid.Main.isChebur;
 import static io.github.arkanoid.Main.isSound;
 
 import com.badlogic.gdx.Gdx;
@@ -26,6 +27,7 @@ public class ScreenSettings implements Screen {
 
     Button btnBack;
     Button btnSound;
+    Button btnCharacter;
 
     public ScreenSettings(Main main) {
         this.main = main;
@@ -38,6 +40,7 @@ public class ScreenSettings implements Screen {
 
         btnBack = new Button(font, "x", 830, 1580);
         btnSound = new Button(font, soundBtnText(), 50,750);
+        btnCharacter = new Button(font, characterBtnText(), 230, 550);
 
     }
 
@@ -48,7 +51,6 @@ public class ScreenSettings implements Screen {
 
     @Override
     public void render(float delta) {
-        ///////
         if(Gdx.input.justTouched()) {
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touch);
@@ -62,10 +64,12 @@ public class ScreenSettings implements Screen {
                 btnSound.setText(soundBtnText());
 
             }
+             if(btnCharacter.hit(touch.x, touch.y)){
+                 isChebur = !isChebur;
+                 btnCharacter.setText(characterBtnText());
+             }
         }
 
-
-        ///////
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
@@ -75,6 +79,7 @@ public class ScreenSettings implements Screen {
 
         btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
         btnSound.font.draw(batch, btnSound.text, btnSound.x, btnSound.y);
+        btnCharacter.font.draw(batch, btnCharacter.text, btnCharacter.x, btnCharacter.y);
 
 
         batch.end();
@@ -109,5 +114,9 @@ public class ScreenSettings implements Screen {
 
     private String soundBtnText() {
         return isSound ? "Музыка включена" : "Музыка выключена";
+    }
+
+    public String characterBtnText() {
+        return isChebur ? "Персонаж: " + "\n" + "Чебурашка" : "Персонаж:" + "\n" + "Карлсон";
     }
 }

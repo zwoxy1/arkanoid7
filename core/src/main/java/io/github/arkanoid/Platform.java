@@ -14,6 +14,4 @@ public class Platform {
         this.width = width;
         this.height = height;
     }
-
-
 }

@@ -1,9 +1,6 @@
 package io.github.arkanoid;
 
 import static io.github.arkanoid.Main.*;
-import static io.github.arkanoid.ScreenGame.gameSound;
-import static io.github.arkanoid.ScreenGame.winSound;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -52,18 +49,13 @@ public class ScreenMenu implements Screen {
 
     @Override
     public void render(float delta) {
-        ///////
         if (Gdx.input.justTouched()) {
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touch);
 
             if (btnGame.hit(touch.x, touch.y)) {
+                main.screenGame.resetGame();
                 main.setScreen(main.screenGame);
-//                if (isSound) {
-//                    gameSound.play();       !!!!!!!!!!!!!!!
-//
-//                }
-
             }
 
             if (btnExit.hit(touch.x, touch.y)) {
@@ -73,11 +65,9 @@ public class ScreenMenu implements Screen {
             if (btnSettings.hit(touch.x, touch.y)){
                 main.setScreen(main.screenSettings);
             }
-
         }
 
 
-        ///////
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
@@ -89,11 +79,7 @@ public class ScreenMenu implements Screen {
         btnGame.font.draw(batch, btnExit.text, btnExit.x, btnExit.y);
         btnSettings.font.draw(batch, btnSettings.text, btnSettings.x, btnSettings.y);
 
-
-
-
         batch.end();
-
     }
 
     @Override

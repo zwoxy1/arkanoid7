@@ -16,6 +16,7 @@ public class Main extends Game {
 
 
     public static boolean isSound = true;
+    public static boolean isChebur = true;
 
 
     public SpriteBatch batch;

@@ -25,12 +25,7 @@ public class Enemy {
 
     void leave() {
         x = - 3000;
-
-
-
-
-
-
+        
     }
 
 

@@ -2,6 +2,7 @@ package io.github.arkanoid;
 
 import static io.github.arkanoid.Main.SCR_HEIGHT;
 import static io.github.arkanoid.Main.SCR_WIDTH;
+import static io.github.arkanoid.Main.isChebur;
 import static io.github.arkanoid.Main.isSound;
 
 import com.badlogic.gdx.Gdx;
@@ -45,6 +46,7 @@ public class ScreenGame implements Screen {
     public static Music gameSound;
     public static Sound loseSound;
     public static Sound winSound;
+    public static Sound leaveSound;
 
 
     Texture imgBg;
@@ -93,14 +95,16 @@ public class ScreenGame implements Screen {
         btnLeft = new ButtonManagement(imgLeft, 100, 150, imgLeft.getWidth(), imgLeft.getHeight());
         btnRight = new ButtonManagement(imgRight, 600, 150, imgRight.getWidth(), imgRight.getHeight());
 
-        imgBall = new Texture("ball.png");
+
         imgPlatform = new Texture("platform.png");
-        imgEnemy = new Texture("chebur.png");
+
+
 
         gameSound = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
         gameSound.setLooping(true);
         winSound = Gdx.audio.newSound(Gdx.files.internal("winsound.mp3"));
         loseSound = Gdx.audio.newSound(Gdx.files.internal("losesound.mp3"));
+        leaveSound = Gdx.audio.newSound(Gdx.files.internal("leavesound.mp3"));
 
         resetGame();
     }
@@ -121,7 +125,7 @@ public class ScreenGame implements Screen {
         a = 65;
         b = 8;
 
-
+        loadEnemyTexture();
 
         gameSound.stop();
 
@@ -135,14 +139,12 @@ public class ScreenGame implements Screen {
                 enemies.add(new Enemy(imgEnemy, a, yPos, imgEnemy.getWidth(), imgEnemy.getHeight()));
                 a += 200;
             }
-            a = 65; // Сбрасываем X-координату для нового ряда
+            a = 65;
         }
 
-        // Создание новых мяча и платформы
         ball = new Ball(30, 750, imgBall.getWidth(), imgBall.getHeight());
         platform = new Platform(300, 375, 100, imgPlatform.getWidth(), imgPlatform.getHeight());
 
-        // Возврат кнопок на место
         btnLeft.x = 100;
         btnRight.x = 600;
         btnBack.x = 850;
@@ -150,14 +152,10 @@ public class ScreenGame implements Screen {
         btnBack.text = "x";
         btnBackBig.x = 3000;
         btnReturn.x = 3000;
-
-
-
     }
 
     @Override
     public void render(float delta) {
-        ///////
         if (Gdx.input.justTouched()) {
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touch);
@@ -178,9 +176,9 @@ public class ScreenGame implements Screen {
                 resetGame();
             }
         }
-        ////
+
         ball.move();
-        ////
+
         if (ball.x > SCR_WIDTH - 200) {
             ball.vx *= -1;
         }
@@ -190,18 +188,16 @@ public class ScreenGame implements Screen {
         if (ball.y > SCR_HEIGHT - 200) {
             ball.vy *= -1;
         }
-        /////
+
 
         if (ball.y + ball.height < 0){
             lose();
         }
 
-
         if (ball.hit(platform.x, platform.y, platform.width, platform.height)) {
             ball.vy *= -1;
         }
 
-        ///////
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
@@ -215,16 +211,16 @@ public class ScreenGame implements Screen {
         for (Enemy e : enemies) {
             if (e.hit(e.x, e.y, ball.x, ball.y)) {
                 e.leave();
+                if(isSound){
+                    leaveSound.play();
+                }
                 b -= 1;
                 ball.vy *= -1;
             }
         }
 
-
         batch.draw(imgBall, ball.x, ball.y);
         batch.draw(imgPlatform, platform.x, platform.y);
-
-
         batch.draw(btnLeft.img, btnLeft.x, btnLeft.y, btnLeft.width, btnLeft.height);
         batch.draw(btnRight.img, btnRight.x, btnRight.y, btnRight.width, btnRight.height);
 
@@ -251,18 +247,11 @@ public class ScreenGame implements Screen {
                 }
             }
         }
-
         batch.end();
-
-
 
         if (b == 0 && !hasWon) {
             win();
-
         }
-
-
-
     }
 
 
@@ -295,8 +284,6 @@ public class ScreenGame implements Screen {
         imgLeft.dispose();
         imgRight.dispose();
         gameSound.dispose();
-
-
     }
 
 
@@ -314,12 +301,9 @@ public class ScreenGame implements Screen {
         btnReturn.x = 300;
         btnBack.x += 100;
         gameSound.stop();
-
         if (isSound) {
             winSound.play();
         }
-
-
     }
 
     public void lose(){
@@ -338,8 +322,13 @@ public class ScreenGame implements Screen {
         if(isSound){
             loseSound.play();
         }
-
     }
 
-
+    private void loadEnemyTexture() {
+        if (imgEnemy != null) {
+            imgEnemy.dispose(); // Освободить старую текстуру
+        }
+        imgEnemy = new Texture(isChebur ? "chebur.png" : "karl.png");
+        imgBall = new Texture(isChebur ? "ball.png" : "jam.png");
+    }
 }
