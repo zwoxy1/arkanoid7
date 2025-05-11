@@ -15,11 +15,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
-
-
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 public class ScreenGame implements Screen {
@@ -99,7 +96,6 @@ public class ScreenGame implements Screen {
         imgPlatform = new Texture("platform.png");
 
 
-
         gameSound = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
         gameSound.setLooping(true);
         winSound = Gdx.audio.newSound(Gdx.files.internal("winsound.mp3"));
@@ -116,7 +112,7 @@ public class ScreenGame implements Screen {
         }
     }
 
-    public void resetGame(){
+    public void resetGame() {
         isGameOver = false;
         hasWon = false;
         hasLose = false;
@@ -128,7 +124,6 @@ public class ScreenGame implements Screen {
         loadEnemyTexture();
 
         gameSound.stop();
-
 
 
         // Очистка списка врагов и создание новых
@@ -171,7 +166,7 @@ public class ScreenGame implements Screen {
             if (btnRight.hit(touch.x, touch.y) && platform.x < SCR_WIDTH - 200) {
                 platform.x += 45;
             }
-            if (btnBackBig.hit(touch.x, touch.y)){
+            if (btnBackBig.hit(touch.x, touch.y)) {
                 main.setScreen(main.screenMenu);
                 resetGame();
             }
@@ -190,7 +185,7 @@ public class ScreenGame implements Screen {
         }
 
 
-        if (ball.y + ball.height < 0){
+        if (ball.y + ball.height < 0) {
             lose();
         }
 
@@ -211,7 +206,7 @@ public class ScreenGame implements Screen {
         for (Enemy e : enemies) {
             if (e.hit(e.x, e.y, ball.x, ball.y)) {
                 e.leave();
-                if(isSound){
+                if (isSound) {
                     leaveSound.play();
                 }
                 b -= 1;
@@ -229,20 +224,20 @@ public class ScreenGame implements Screen {
         if (showWinText) {
             font.draw(batch, winText, 150, 1100);
             btnReturn.font.draw(batch, btnReturn.text, btnReturn.x, btnReturn.y);
-            if(btnReturn.hit(touch.x, touch.y)){
+            if (btnReturn.hit(touch.x, touch.y)) {
                 resetGame();
-                if(isSound){
+                if (isSound) {
                     gameSound.play();
                 }
             }
         }
 
-        if (showLoseText){
+        if (showLoseText) {
             font.draw(batch, loseText, 150, 1100);
             btnReturn.font.draw(batch, btnReturn.text, btnReturn.x, btnReturn.y);
-            if(btnReturn.hit(touch.x, touch.y)){
+            if (btnReturn.hit(touch.x, touch.y)) {
                 resetGame();
-                if(isSound){
+                if (isSound) {
                     gameSound.play();
                 }
             }
@@ -287,7 +282,6 @@ public class ScreenGame implements Screen {
     }
 
 
-
     public void win() {
         if (hasWon) return;
         if (showWinText) return;
@@ -306,9 +300,9 @@ public class ScreenGame implements Screen {
         }
     }
 
-    public void lose(){
+    public void lose() {
         if (hasLose) return;
-        if(showLoseText) return;
+        if (showLoseText) return;
         hasLose = true;
         showLoseText = true;
         ball.stop();
@@ -319,7 +313,7 @@ public class ScreenGame implements Screen {
         btnReturn.x = 300;
         btnBack.x += 100;
         gameSound.stop();
-        if(isSound){
+        if (isSound) {
             loseSound.play();
         }
     }
