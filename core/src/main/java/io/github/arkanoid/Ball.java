@@ -2,8 +2,8 @@ package io.github.arkanoid;
 
 public class Ball {
     public float x, y;
-    public float vx = 10;
-    public float vy = -10;
+    public float vx = 7;
+    public float vy = -7;
     public float width;
     public float height;
 
