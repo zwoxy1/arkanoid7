@@ -200,14 +200,14 @@ public class ScreenGame implements Screen {
         btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
 
         for (Enemy e : enemies) {
-            batch.draw(e.img, e.x, e.y);
+            batch.draw(e.img, e.x, e.y); // отрисочка врагов
         }
 
         for (Enemy e : enemies) {
             if (e.hit(e.x, e.y, ball.x, ball.y)) {
                 e.leave();
                 if (isSound) {
-                    leaveSound.play();
+                    leaveSound.play();    // касание врага
                 }
                 b -= 1;
                 ball.vy *= -1;
@@ -225,7 +225,7 @@ public class ScreenGame implements Screen {
             font.draw(batch, winText, 150, 1100);
             btnReturn.font.draw(batch, btnReturn.text, btnReturn.x, btnReturn.y);
             if (btnReturn.hit(touch.x, touch.y)) {
-                resetGame();
+                resetGame();                                // показать текст о выигрыше
                 if (isSound) {
                     gameSound.play();
                 }
@@ -235,7 +235,7 @@ public class ScreenGame implements Screen {
         if (showLoseText) {
             font.draw(batch, loseText, 150, 1100);
             btnReturn.font.draw(batch, btnReturn.text, btnReturn.x, btnReturn.y);
-            if (btnReturn.hit(touch.x, touch.y)) {
+            if (btnReturn.hit(touch.x, touch.y)) {   // показать текст о проигрыше
                 resetGame();
                 if (isSound) {
                     gameSound.play();
@@ -245,7 +245,7 @@ public class ScreenGame implements Screen {
         batch.end();
 
         if (b == 0 && !hasWon) {
-            win();
+            win();             // проверка победы
         }
     }
 
@@ -320,7 +320,7 @@ public class ScreenGame implements Screen {
 
     private void loadEnemyTexture() {
         if (imgEnemy != null) {
-            imgEnemy.dispose(); // Освободить старую текстуру
+            imgEnemy.dispose();
         }
         imgEnemy = new Texture(isChebur ? "chebur.png" : "karl.png");
         imgBall = new Texture(isChebur ? "ball.png" : "jam.png");
